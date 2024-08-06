@@ -27,13 +27,43 @@ public myForm: FormGroup = this.fb.group({
  constructor( private fb: FormBuilder) {}
   ngOnInit(): void {
     //aquí inicializamos el formulario y nos creamos una constante rtx5090
-    this.myForm.reset( rtx5090 );
-
+    // this.myForm.reset( rtx5090 );
   }
 
- onSave():void {
-  console.log(this.myForm.value);
+  //validamos con un método
+  isValidField( field: string ): boolean | null {
+    return this.myForm.controls[field].errors
+      && this.myForm.controls[field].touched;
+  }
 
+  getFieldError( field: string): string | null {
+
+    if ( !this.myForm.controls[field]  ) return null; //si no tenemos ese campo no regresa nada
+
+    const errors = this.myForm.controls[field].errors || {}; //si es nulo regresa un objeto vacío
+
+    for (const key of Object.keys(errors)) {
+      switch( key) {
+        case 'required':
+          return 'Este campo es requerido';
+        case 'minlength':
+          return `Mínimo ${ errors['minlength'].requiredLength} caracters.`;
+
+      }
+    }
+
+    return null;
+  }
+
+
+ onSave():void {
+
+  if (this.myForm.invalid) {
+    this.myForm.markAllAsTouched(); //marca todos los campos como si hubieran sido tocados
+    return;
+  }
+
+  console.log(this.myForm.value);
   //restablecer el formulario
   this.myForm.reset({ price: 0, inStorage: 0 });
  }
