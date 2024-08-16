@@ -1,7 +1,7 @@
-  import { FormControl } from "@angular/forms";
+  import { FormControl, ValidationErrors } from "@angular/forms";
 
 
-export const cantBeStrider = ( control: FormControl ) => {
+export const cantBeStrider = ( control: FormControl ): ValidationErrors | null => {
   // trim() limpia la posicion delante y detrás
   // toLowerCase() para hacerlo en minúscula
   //esta validacion solo asegura que no sea strider
